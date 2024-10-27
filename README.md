@@ -75,11 +75,11 @@ Vậy còn nếu bạn sử dụng các thiết bị hệ điều hành dạng L
 Để tải xuống, bạn có thể tải xuống từng file bởi các lệnh sau. Lưu ý rằng, bạn nên tạo thư mục `/opt/netbox-telegram/` để chứa các file
 - Tải xuống Bot_Tele_NetBox.py:
 ```
-curl -O raw.githubusercontent.com/Ducmanh28/Thuc-Tap/refs/heads/main/Linux/03. Linuxvagiaothucmang/NetBox/Tools/Bot_Tele/Bot_Tele_NetBox.py
+curl -O https://raw.githubusercontent.com/hocchudong/netbox-telegram-bot/refs/heads/main/Bot_Tele_NetBox.py
 ```
 - Tải xuống `config.py`:  
 ```
-curl -O raw.githubusercontent.com/Ducmanh28/Thuc-Tap/refs/heads/main/Linux/03. Linuxvagiaothucmang/NetBox/Tools/Bot_Tele/config.py
+curl -O https://raw.githubusercontent.com/hocchudong/netbox-telegram-bot/refs/heads/main/config.py
 ```
 
 ### 3. Tải xuống các mục cần thiết
