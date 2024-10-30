@@ -347,7 +347,7 @@ def report_information(rp_thing):
             report += f"Total VLANS: *{nb.ipam.vlans.count()}*\n"
             report += "*Virtualization*\n"
             report += f"Total Clusters: *{nb.virtualization.clusters.count()}*\n"
-            report += f"Total Interfaces: *{nb.virtualization.interfaces.count()}*"
+            report += f"Total Interfaces: *{nb.virtualization.interfaces.count()}*\n"
             report += f"Total Virtual Machine: *{nb.virtualization.virtual_machines.count()}*\n"
             report += f"Total Virtual Disks: *{nb.virtualization.virtual_disks.count()}*\n"  
             return report          
