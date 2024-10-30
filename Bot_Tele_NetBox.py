@@ -366,29 +366,31 @@ async def cmd_report(update:Update, context: ContextTypes.DEFAULT_TYPE ):
 def freeip_information(number):
     try:
         prefixes = nb.ipam.prefixes.all()
-        report = " "
+        report = ""
         unused_ips = []
+
         for prefix in prefixes:
+            # Filter IPs within the current prefix and check their status
+            unactive_ips = nb.ipam.ip_addresses.filter(parent=prefix.prefix)
+            for ip in unactive_ips:
+                if ip.status.value.lower() != "active":
+                    unused_ips.append({
+                        "address": ip.address,
+                        "prefix": prefix.prefix,
+                        "status": "Unactive"
+                    })
+            
+            # Retrieve available IPs for each prefix
             available_ips = nb.ipam.prefixes.get(prefix.id).available_ips.list()
             for ip in available_ips:
                 unused_ips.append({
-                "address": ip['address'],
-                "prefix": prefix.prefix,
-                "status": "Not Initialized"
+                    "address": ip['address'],
+                    "prefix": prefix.prefix,
+                    "status": "Not Initialized"
                 })
-        
-        unactive_ips = nb.ipam.ip_addresses.all()
-        for ips in unactive_ips:
-            if ips.status.value != "active":
-                unused_ips.append({
-                "address": ips['address'],
-                "prefix": prefix.prefix,
-                "status": "Unactive"
-                })
-        
         report = f"*Total IPs Free*: {len(unused_ips)}\n"   
         for i in range(min(number, len(unused_ips))):
-            report += f"IP: `{unused_ips[i]['address']}`, Prefix: {unused_ips[i]['prefix']}, Status: {unused_ips[i]['status']}\n"
+            report += f"IP: `{unused_ips[i]['address']}`, Prefix: {unused_ips[i]['prefix']}, Status: *{unused_ips[i]['status']}*\n"
         return report
     except Exception as e:
         return f"Error: {str(e)}"
@@ -396,11 +398,11 @@ def freeip_information(number):
 # Defind the message when user enter /freeip
 async def cmd_ipfree(update:Update, context: ContextTypes.DEFAULT_TYPE):
     number = int(context.args[0])
-    if number <= 10:
+    if 1 <= number <= 10:
         msg = freeip_information(number)
         await update.message.reply_text(str(msg), parse_mode='Markdown')
     else: 
-        await update.message.reply_text("Please insert number < 10")
+        await update.message.reply_text("Please insert number between 1 and 10")
 
 # Function to show rack
 def rack_information(r_name):
