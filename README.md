@@ -10,6 +10,7 @@ Bot hiện tại có thể:
 - Tìm kiếm người quản lý thiết bị
 - Hiển thị thông tin tủ rack
 - Hiển thị thông tin các kết nối của một thiết bị
+- Hiển thị báo cáo VM theo Platform
 - Báo cáo tổng số lượng và hiển thị danh sách của vm,ip, device, rack hoặc tổng thể
 ## I. Chuẩn bị
 Trước khi tiến tới cài đặt và sử dụng, bạn sẽ cần:
@@ -98,6 +99,10 @@ systemctl enable netboxinfo
 - Tìm kiếm Device theo tên:
 
 ![](/Anh/Screenshot_968.png)
+
+- Xem báo cáo Virtual Machine theo Platform và hiển thị thông vin Virtual Machine:
+
+![](/Anh/Screenshot_973.png)
 
 - Xem báo cáo tổng quát:
 

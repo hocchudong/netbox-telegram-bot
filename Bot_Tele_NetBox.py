@@ -230,7 +230,7 @@ def VM_information(VM_name):
                     f"VM Device:        `{vm.device if vm.device else 'None'}` \n"
                     f"VM IP:            `{vm.primary_ip if vm.primary_ip else 'None'}` \n"
                     f"VM Description:    {vm.description if vm.description else 'None'} \n"
-                    f"VM OS:            {vm.platform.name if vm.platform else 'None'} \n"          
+                    f"VM OS:             `{vm.platform.name if vm.platform else 'None'}` \n"          
                     f"VM Size:          CPU - {vm.vcpus if vm.vcpus else 'None'}, RAM - {vm.memory if vm.memory else 'None'} MB, DISK {vm.disk if vm.disk else 'None'} GB \n"
                     f"VM Comments:      {vm.comments if vm.comments else 'None'} \n"
                     f"`=================================================`\n"
@@ -361,6 +361,7 @@ async def cmd_report(update:Update, context: ContextTypes.DEFAULT_TYPE ):
     msg = report_information(rp_thing)
     msg = msg.replace("_", "-")
     await update.message.reply_text(str(msg),parse_mode='Markdown')
+
 # Function to collect free IP
 def freeip_information(number):
     try:
@@ -372,11 +373,22 @@ def freeip_information(number):
             for ip in available_ips:
                 unused_ips.append({
                 "address": ip['address'],
-                "prefix": prefix.prefix
+                "prefix": prefix.prefix,
+                "status": "Not Initialized"
                 })
+        
+        unactive_ips = nb.ipam.ip_addresses.all()
+        for ips in unactive_ips:
+            if ips.status.value != "active":
+                unused_ips.append({
+                "address": ips['address'],
+                "prefix": prefix.prefix,
+                "status": "Unactive"
+                })
+        
         report = f"*Total IPs Free*: {len(unused_ips)}\n"   
         for i in range(min(number, len(unused_ips))):
-            report += f"IP: `{unused_ips[i]['address']}`, Prefix: {unused_ips[i]['prefix']}\n"
+            report += f"IP: `{unused_ips[i]['address']}`, Prefix: {unused_ips[i]['prefix']}, Status: {unused_ips[i]['status']}\n"
         return report
     except Exception as e:
         return f"Error: {str(e)}"
@@ -384,9 +396,11 @@ def freeip_information(number):
 # Defind the message when user enter /freeip
 async def cmd_ipfree(update:Update, context: ContextTypes.DEFAULT_TYPE):
     number = int(context.args[0])
-    msg = freeip_information(number)
-    msg = msg.replace("_", "-")
-    await update.message.reply_text(str(msg), parse_mode='Markdown')
+    if number <= 10:
+        msg = freeip_information(number)
+        await update.message.reply_text(str(msg), parse_mode='Markdown')
+    else: 
+        await update.message.reply_text("Please insert number < 10")
 
 # Function to show rack
 def rack_information(r_name):
@@ -493,6 +507,35 @@ async def cmd_tenant(update:Update, context: ContextTypes.DEFAULT_TYPE):
     msg = tenant_information(t_name)
     msg = msg.replace("_", "-")
     await update.message.reply_text(str(msg), parse_mode='Markdown')
+
+# Function to count Virtual Machine by its Platform
+def virtualmachineplatform_count(platform_name):
+    try:
+        all_virtualmachine = nb.virtualization.virtual_machines.all()
+        if all_virtualmachine:
+            count = 0
+            msg = f"*No*.  *Virtual Machine name*\n"
+            msg += f"`---------------------------------------`\n"
+            for virtualmachine in all_virtualmachine:
+                print(virtualmachine)
+                print(platform_name)
+                if virtualmachine.platform.name == platform_name:
+                    count+=1
+                    msg += f"{count}.   `{virtualmachine.name}`\n"
+            msg += f"The number of virtual machines with the operating system *{platform_name}* is: *{count}*\n"  
+            print(msg)                 
+            return msg
+        else:
+            return "Error when process!"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Defind the message when user enter /platformofvm
+async def cmd_platformvm(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    p_name = ' '.join(context.args) if context.args else ""
+    msg = virtualmachineplatform_count(p_name)
+    await update.message.reply_text(str(msg), parse_mode='Markdown')
+
 # Defind the message when user enter /start
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = f"Welcome to *Bot_Tele_NetBox* - where you can search information at your NetBox easily!\n"
@@ -513,7 +556,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "7. Show Rack list by its name: `/rack rack_name`",
         "8. Show interface connect of Device by device name: `/interface device_name`",
         "9. Show List Device or Ip of Tenant: `/tenant tenant_name`",
-        "10. Report Total: `/report (vm/device/ip/rack/all)`"
+        "10. Count Virtual Machines by its Platform: `/platformofvm platform_name`",
+        "11. Report Total: `/report (vm/device/ip/rack/all)`"
     ]
     await update.message.reply_text('Use the following commands:\n' + '\n'.join(commands), parse_mode='Markdown')
 
@@ -564,6 +608,7 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler('tenant',cmd_tenant,filters.User(username=config.ADMIN_IDS)))
     application.add_handler(CommandHandler('report', cmd_report,filters.User(username=config.ADMIN_IDS)))
     application.add_handler(CommandHandler('ipfree', cmd_ipfree,filters.User(username=config.ADMIN_IDS)))
+    application.add_handler(CommandHandler('platformofvm', cmd_platformvm,filters.User(username=config.ADMIN_IDS)))
     application.add_handler(MessageHandler(filters.TEXT, handle_message))
 
     application.run_polling()
