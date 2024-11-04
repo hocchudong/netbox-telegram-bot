@@ -11,7 +11,7 @@ Bot hiện tại có thể:
 - Hiển thị thông tin tủ rack
 - Hiển thị thông tin các kết nối của một thiết bị
 - Hiển thị báo cáo VM theo Platform
-- Báo cáo tổng số lượng và hiển thị danh sách của vm,ip, device, rack hoặc tổng thể
+- Báo cáo tổng số lượng và hiển thị danh sách của vm,ip, device, rack, platform hoặc tổng thể
 ## I. Chuẩn bị
 Trước khi tiến tới cài đặt và sử dụng, bạn sẽ cần:
 - Ứng dụng ***Telegram*** và tài khoản
@@ -87,8 +87,8 @@ WantedBy=multi-user.target
 ```
 systemctl daemon-reload
 systemctl start netboxinfo
-systemctl status netboxinfo
 systemctl enable netboxinfo
+systemctl status netboxinfo
 ```
 ## III. Một vài hình ảnh sử dụng
 
@@ -100,6 +100,12 @@ systemctl enable netboxinfo
 
 ![](/Anh/Screenshot_968.png)
 
+- Hiển thị danh sách máy ảo theo hệ điều hành
+  - Xem báo cáo tên hệ điều hành
+  - Tìm kiếm các máy ảo theo tên hệ điều hành
+
+![](/Anh/Screenshot_976.png)
+
 - Xem báo cáo Virtual Machine theo Platform và hiển thị thông vin Virtual Machine:
 
 ![](/Anh/Screenshot_973.png)
@@ -110,4 +116,4 @@ systemctl enable netboxinfo
 
 Và còn nhiều chức năng khác nữa, hãy tự khám phá nhé.
 ## IV. Tham khảo
-Nếu bạn quan tâm chi tiết hơn tool này, thãy tham khảo [Intro](https://github.com/hocchudong/netbox-telegram-bot/blob/main/Intro.md)
+Nếu bạn quan tâm chi tiết hơn tool này, thãy tham khảo file [Intro](https://github.com/hocchudong/netbox-telegram-bot/blob/main/Intro.md)
