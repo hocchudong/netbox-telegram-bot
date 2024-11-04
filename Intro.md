@@ -11,6 +11,7 @@ Bot_Tele_NetBox là một con Bot Telegram. Con Bot có chức năng nhận tin 
 - [x] Tìm kiếm người quản lý thiết bị
 - [x] Hiển thị thông tin tủ rack
 - [x] Hiển thị thông tin các kết nối của một thiết bị
+- [x] Hiển thị tổng số máy ảo theo Platform
 - [x] Báo cáo tổng số lượng và hiển thị danh sách của vm,ip, device, rack hoặc tổng thể
 
 Tuy chỉ là một số chức năng cơ bản, nhưng Bot sẽ giúp chúng ta tiết kiệm thời gian rất nhiều và tìm chính xác thông tin một cách nhanh chóng. 
@@ -46,12 +47,25 @@ Rất dễ hiểu đúng không nào
 
 ### 2. Một vài thông tin về code
 
-Bot_Tele_NetBox sử dụng pynetbox - một thư viện python hỗ trợ cho việc giao tiếp giữa thiết bị và NetBox thông qua API. Thay vì dùng request, nhập URL và Getdata phức tạp thì nay chúng ta đã có pynetbox.
+Bot_Tele_NetBox sử dụng `pynetbox` - một thư viện python hỗ trợ cho việc giao tiếp giữa thiết bị và NetBox thông qua API. Thay vì dùng request, nhập URL và Getdata phức tạp thì nay chúng ta đã có `pynetbox` với cách sử dụng dễ dàng, tiện ích hơn.
 
-Và tất nhiên để cấu hình cho Bot được thì chúng ta sẽ cần có một số lib từ thư viện Telegram của Python để làm việc với Bot Telegram.
+Và tất nhiên để cấu hình cho Bot được thì chúng ta sẽ cần có một số lib từ thư viện ***Telegram*** của Python để làm việc với Bot Telegram.
 
-Hàm Async - Asynchronous def là một hàm bất động bộ đã được tôi sử dụng trong code của mình. Các hàm kiểu này có thể chạy độc lập, mặc cho các hàm khác ở trên nó chưa được chạy hoặc chưa chạy xong.
+Hàm `Async` - ***Asynchronous def*** là một hàm bất động bộ đã được tôi sử dụng trong code của mình. Các hàm kiểu này có thể chạy độc lập, mặc cho các hàm khác ở trên nó chưa được chạy hoặc chưa chạy xong.
 
-Ngôn ngữ Markdown được tôi sử dụng để định dạng tin nhắn đầu ra cho Bot, khiến tin nhắn trở nên đẹp, dễ nhìn  và giúp người dùng dễ thao tác hơn
+Ngôn ngữ Markdown được tôi sử dụng để định dạng tin nhắn đầu ra cho Bot, khiến tin nhắn trở nên đẹp, dễ nhìn và giúp người dùng dễ thao tác hơn.
 
 Code chính được sử dụng ở đây là ngôn ngữ Python. Về mặt tư duy logic, code dựa trên code có sẵn của  [hungviet99](https://github.com/hungviet99), được cải tiến bởi tôi và có thêm sử trợ giúp của đồng nghiệp và chatGPT để tạo ra phiên bản tốt nhất hiện tại.
+
+## III. Tham khảo
+[Kiến thức về Pynetbox](https://github.com/netbox-community/pynetbox)
+
+[Hàm Async](https://superfastpython.com/asyncio-async-def/)
+
+[Telegram Bot](https://core.telegram.org/bots)
+
+[Markdown Python](https://python-markdown.github.io/reference/markdown/)
+
+Nếu có bất kỳ thắc mắc bạn có thể liên hệ với tôi thông qua:
+- **Telegram**: `@ducmanh2873`
+- **Gmail**: `luongducmanh02@gmail.com`

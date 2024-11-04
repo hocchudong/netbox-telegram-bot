@@ -1,5 +1,17 @@
 # Hướng dẫn cài đặt và sử dụng Bot Tele NetBox
 
+##  Tính năng của Bot
+Bot hiện tại có thể:
+- Tìm kiếm thông tin về địa chỉ IP
+- Tìm kiếm thông tin về các địa chỉ IP hiện đang trống trong dải Prefix có sẵn
+- Tìm kiếm thông tin về thiết bị theo tên
+- Tìm kiếm thông tin về thiết bị theo số serial
+- Tìm kiếm thông tin về máy ảo
+- Tìm kiếm người quản lý thiết bị
+- Hiển thị thông tin tủ rack
+- Hiển thị thông tin các kết nối của một thiết bị
+- Hiển thị báo cáo VM theo Platform
+- Báo cáo tổng số lượng và hiển thị danh sách của vm,ip, device, rack hoặc tổng thể
 ## I. Chuẩn bị
 Trước khi tiến tới cài đặt và sử dụng, bạn sẽ cần:
 - Ứng dụng ***Telegram*** và tài khoản
@@ -88,8 +100,14 @@ systemctl enable netboxinfo
 
 ![](/Anh/Screenshot_968.png)
 
+- Xem báo cáo Virtual Machine theo Platform và hiển thị thông vin Virtual Machine:
+
+![](/Anh/Screenshot_973.png)
+
 - Xem báo cáo tổng quát:
 
 ![](/Anh/Screenshot_969.png)
 
 Và còn nhiều chức năng khác nữa, hãy tự khám phá nhé.
+## IV. Tham khảo
+Nếu bạn quan tâm chi tiết hơn tool này, thãy tham khảo [Intro](https://github.com/hocchudong/netbox-telegram-bot/blob/main/Intro.md)
