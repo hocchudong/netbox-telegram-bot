@@ -242,7 +242,6 @@ def VM_information(VM_name):
         return msg            
     except Exception as e:  
         return f"Error: {str(e)}"
-     
 # Defind the message when user enter /vm
 async def cmd_vm(update: Update, context: ContextTypes.DEFAULT_TYPE):
     vm_name = context.args
@@ -293,7 +292,7 @@ def report_information(rp_thing):
                     report += f"{index}. `{device.name}` - {device.id} \n"
                 return report
             else:
-                return "Can't take information of total device!"
+                return "No device found!"
         elif rp_thing == "vm":
             total_vms = nb.virtualization.virtual_machines.count()
             if total_vms:
@@ -304,7 +303,7 @@ def report_information(rp_thing):
                     report += f"{index}. `{vm.name}` -- {vm.id} \n"
                 return report
             else:
-                return "Can't take information of total virtual machine!"
+                return "No virtual machine found!"
         elif rp_thing == "ip":
             total_ips = nb.ipam.ip_addresses.count()
             if total_ips:
@@ -315,7 +314,7 @@ def report_information(rp_thing):
                     report += f"{index}. `{ip.address}` - {ip.id}\n"
                 return report
             else:
-                return "Can't take information of total IPv4!"
+                return "No IP found"
         elif rp_thing == "rack":
             total_racks = nb.dcim.racks.count()
             if total_racks > 0:
@@ -326,7 +325,18 @@ def report_information(rp_thing):
                     report += f"{index}. `{rack.name}` - {rack.id}\n"
                 return report
             else:
-                return "No racks found!"
+                return "No rack found!"
+        elif rp_thing == "platform":
+            total_platform = nb.dcim.platforms.count()
+            if total_platform > 0:
+                platform_list = nb.dcim.platforms.all()
+                report = f"*Total Platform*: {total_platform}\n\n"
+                report += "No.  Platform Name\n"
+                for index, platform in enumerate(platform_list, 1):
+                    report += f"{index}.   `{platform.name}`\n"
+                return report
+            else:
+                return "No platform found!"
         elif rp_thing == "all":
             report = "*Total Report:*\n"
             report += f"``-------------------------\n"
@@ -352,7 +362,7 @@ def report_information(rp_thing):
             report += f"Total Virtual Disks: *{nb.virtualization.virtual_disks.count()}*\n"  
             return report          
         else:
-            return "Please Enter only `ip`, `device`, `vm`, `rack`, or `all`"
+            return "Please Enter only `ip`, `device`, `vm`, `rack`,`platform`, or `all`"
     except Exception as e:
         return f"Error: {str(e)}"
 # Defind the message when user enter /report
