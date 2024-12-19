@@ -44,10 +44,14 @@ Bạn sẽ cần cài đặt các gói sau:
 - Thiết lập môi trường ảo với **python3**:
     - `cd /opt/netbox-telegram`
     - `python3 -m venv venv`
+- Truy cập vào môi trường ảo:
+  - `source venv/bin/activate`
 - Cài đặt các mục cần thiết sử dụng `pip install`
     - `pip install pynetbox`
     - `pip install python-telegram-bot`
     - `pip install requests`
+    - `pip install telegram`
+    - `pip install urllib3`
 
 ### Bước 4. Cấu hình trước khi sử dụng
 
