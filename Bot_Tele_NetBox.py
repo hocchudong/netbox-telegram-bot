@@ -6,6 +6,7 @@ import urllib3
 import config
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
+from telegram.helpers import escape_markdown
 
 # Log config
 logging.basicConfig(
@@ -285,14 +286,23 @@ def report_information(rp_thing):
         if rp_thing == "device":
             total_devices = nb.dcim.devices.count()
             if total_devices:
-                device_list = nb.dcim.devices.all()
-                report = f"*Total Devices*: {total_devices}\n\n"
-                report += "No. Device Name - ID \n"
-                for index, device in enumerate(device_list, 1):
-                    report += f"{index}. `{device.name}` - {device.id} \n"
-                return report
+                device_list = list(nb.dcim.devices.all())  
+                reports = []
+                chunk_size = 20  
+                for i in range(0, len(device_list), chunk_size):
+                    chunk = device_list[i:i + chunk_size]
+                    if i == 0:
+                        report = f"*Devices List (Page {i // chunk_size + 1}):*\n"
+                        report += f"*Total Devices*: {total_devices}\n\n"
+                    else:
+                        report = f"*Devices List (Page {i // chunk_size + 1}):*\n\n"
+                    report += "No. Device Name - ID \n"
+                    for index, device in enumerate(chunk, 1):
+                        report += f"{index + i}. `{escape_markdown(device.name)}` - {device.id} \n"
+                    reports.append(report)
+                return reports
             else:
-                return "No device found!"
+                return ["No device found!"]
         elif rp_thing == "vm":
             total_vms = nb.virtualization.virtual_machines.count()
             if total_vms:
@@ -300,10 +310,10 @@ def report_information(rp_thing):
                 report = f"Total VM: {total_vms}\n\n"
                 report += "No. VM Name -- ID \n"
                 for index, vm in enumerate(vm_list, 1):
-                    report += f"{index}. `{vm.name}` -- {vm.id} \n"
-                return report
+                    report += f"{index}. `{escape_markdown(vm.name)}` -- {vm.id} \n"
+                return [report]
             else:
-                return "No virtual machine found!"
+                return ["No virtual machine found!"]
         elif rp_thing == "ip":
             total_ips = nb.ipam.ip_addresses.count()
             if total_ips:
@@ -311,10 +321,10 @@ def report_information(rp_thing):
                 report = f"*Total IPv4*: {total_ips}\n\n"
                 report += "No. IP Address - ID \n"
                 for index, ip in enumerate(ip_list, 1):
-                    report += f"{index}. `{ip.address}` - {ip.id}\n"
-                return report
+                    report += f"{index}. `{escape_markdown(ip.address)}` - {ip.id}\n"
+                return [report]
             else:
-                return "No IP found"
+                return ["No IP found"]
         elif rp_thing == "rack":
             total_racks = nb.dcim.racks.count()
             if total_racks > 0:
@@ -322,10 +332,10 @@ def report_information(rp_thing):
                 report = f"*Total Rack*: {total_racks}\n\n"
                 report += "No. Rack Name - ID\n"
                 for index, rack in enumerate(rack_list, 1):
-                    report += f"{index}. `{rack.name}` - {rack.id}\n"
-                return report
+                    report += f"{index}. `{escape_markdown(rack.name)}` - {rack.id}\n"
+                return [report]
             else:
-                return "No rack found!"
+                return ["No rack found!"]
         elif rp_thing == "platform":
             total_platform = nb.dcim.platforms.count()
             if total_platform > 0:
@@ -333,10 +343,10 @@ def report_information(rp_thing):
                 report = f"*Total Platform*: {total_platform}\n\n"
                 report += "No.  Platform Name\n"
                 for index, platform in enumerate(platform_list, 1):
-                    report += f"{index}.   `{platform.name}`\n"
-                return report
+                    report += f"{index}. `{escape_markdown(platform.name)}`\n"
+                return [report]
             else:
-                return "No platform found!"
+                return ["No platform found!"]
         elif rp_thing == "all":
             report = "*Total Report:*\n"
             report += f"``-------------------------\n"
@@ -360,17 +370,20 @@ def report_information(rp_thing):
             report += f"Total Interfaces: *{nb.virtualization.interfaces.count()}*\n"
             report += f"Total Virtual Machine: *{nb.virtualization.virtual_machines.count()}*\n"
             report += f"Total Virtual Disks: *{nb.virtualization.virtual_disks.count()}*\n"  
-            return report          
+            return [report]          
         else:
-            return "Please Enter only `ip`, `device`, `vm`, `rack`,`platform`, or `all`"
+            return ["Please Enter only `ip`, `device`, `vm`, `rack`,`platform`, or `all`"]
     except Exception as e:
-        return f"Error: {str(e)}"
-# Defind the message when user enter /report
-async def cmd_report(update:Update, context: ContextTypes.DEFAULT_TYPE ):
+        return [f"Error: {str(e)}"]
+
+# Define the message when user enters /report
+async def cmd_report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     rp_thing = context.args[0]  
-    msg = report_information(rp_thing)
-    msg = msg.replace("_", "-")
-    await update.message.reply_text(str(msg),parse_mode='Markdown')
+    messages = report_information(rp_thing)
+    for msg in messages:
+        await update.message.reply_text(msg, parse_mode='Markdown')
+
+    
 
 # Function to collect free IP
 def freeip_information(number):
@@ -559,17 +572,17 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Defind the message when user enter /help
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     commands = [
-        "1. Find IP information: `/ip ip_addr`",
-        "2. Find Free IP: `/ipfree number`",
-        "3. Find Device by its name: `/device device_name`",
-        "4. Find Device by its serial number: `/devicesn device_serial_number`",
-        "5. Find Virtual Machine by its name: `/vm vm_name`",
-        "6. Find Contact of Device by its name: `/contact contact_name`",
-        "7. Show Rack list by its name: `/rack rack_name`",
-        "8. Show interface connect of Device by device name: `/interface device_name`",
-        "9. Show List Device or Ip of Tenant: `/tenant tenant_name`",
-        "10. Count Virtual Machines by its Platform: `/platformofvm platform_name`",
-        "11. Report Total: `/report (vm/device/ip/rack/all)`"
+        "1. Find IP information: `/ip `ip_address",
+        "2. Find Free IP: `/ipfree `number",
+        "3. Find Device by its name: `/device `device_name",
+        "4. Find Device by its serial number: `/devicesn `device_serial_number",
+        "5. Find Virtual Machine by its name: `/vm `vm_name",
+        "6. Find Contact of Device by its name: `/contact `contact_name",
+        "7. Show Rack list by its name: `/rack `rack_name",
+        "8. Show interface connect of Device by device name: `/interface `device_name",
+        "9. Show List Device or Ip of Tenant: `/tenant `tenant_name",
+        "10. Count Virtual Machines by its Platform: `/platformofvm `platform_name",
+        "11. Report Total: `/report `(vm/device/ip/rack/all)"
     ]
     await update.message.reply_text('Use the following commands:\n' + '\n'.join(commands), parse_mode='Markdown')
 
