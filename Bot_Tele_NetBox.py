@@ -122,32 +122,35 @@ def device_information(device_name):
                             msg+= "......"
                             break
                         index += 1
-                        #if interface.connected_endpoints:
-                            #for interface.connected_endpoint in interface.connected_endpoints:
-                                #msg += f"Interface {index}: `{interface.name}` has connected to {interface.connected_endpoint.name} of {interface.connected_endpoint.device.name}\n"
-                        #else:
-                            #msg += f"Interface {index}: `{interface.name}` is currently not connected to any other interface\n"
                         msg += f"Interface {index}: *{interface.name}*\n"
                     msg += f"Too see detail of connected interfaces of {device_name} please enter `/interfaceof {device_name}`\n"
         else:
             msg = "Can't find any information about this device."
         return msg
-            
+
     except Exception as e:
         return f"Error: {str(e)}"
 
-# Defind the message when user enter /device
+# Define the message when user enter /device
 async def cmd_device(update: Update, context: ContextTypes.DEFAULT_TYPE):
     device_name = ' '.join(context.args) if context.args else ""
     msg = device_information(device_name)
     msg = msg.replace("_", "-")
-    max_length = 4096  # Độ dài tối đa cho một tin nhắn
+    max_length = 4096  # Max length for a message
     if len(msg) > max_length:
-        # Chia tin nhắn thành các phần nhỏ hơn
+        # Split the message into smaller chunks
         for i in range(0, len(msg), max_length):
-            await update.message.reply_text(msg[i:i + max_length], parse_mode='Markdown')
+            # Ensure we're not splitting in the middle of words or incomplete Markdown formatting
+            chunk = msg[i:i + max_length]
+            if i + max_length < len(msg):  # Check if it's not the last chunk
+                # Find the last space before the max length to avoid cutting off a word
+                split_point = chunk.rfind(' ')
+                if split_point != -1:
+                    chunk = chunk[:split_point]
+            await update.message.reply_text(chunk, parse_mode='Markdown')
     else:
         await update.message.reply_text(msg, parse_mode='Markdown')
+
 
 # Function to collect information of Device
 def devicesn_information(device_serial_number):

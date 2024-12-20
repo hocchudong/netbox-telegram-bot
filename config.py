@@ -1,11 +1,11 @@
 # Enter who can recieve the messenger from Bot
-ADMIN_IDS = ['@ducmanh2873']
+ADMIN_IDS = ['Nhập user Telegram của bạn ở đây', 'Thêm người khác nếu có']
 
 # Enter the URL of NetBox
-URLNETBOX = "https://www.netboxlab.local"              
+URLNETBOX = "Nhập URL Netbox ở đây, ví dụ 'http://netboxtest.local'"              
 
 # Enter the NetBox Token                    
-TOKENNETBOX = "aa8f29998abd6a63f476a2328ce2a629a506b579"
+TOKENNETBOX = "Nhập Token NetBox ở đây"
 
 # Enter the Token Bot Telegram
-TOKENTELEGRAM = "7660744016:AAHiWWvkRbVxtW40L-VHrE0IEDRXW9rMieU"
+TOKENTELEGRAM = "Nhập Token Bot của bạn ở đây"
