@@ -575,17 +575,17 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Defind the message when user enter /help
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     commands = [
-        "1. Find IP information: `/ip `ip_address",
-        "2. Find Free IP: `/ipfree `number",
-        "3. Find Device by its name: `/device `device_name",
-        "4. Find Device by its serial number: `/devicesn `device_serial_number",
-        "5. Find Virtual Machine by its name: `/vm `vm_name",
-        "6. Find Contact of Device by its name: `/contact `contact_name",
-        "7. Show Rack list by its name: `/rack `rack_name",
-        "8. Show interface connect of Device by device name: `/interface `device_name",
-        "9. Show List Device or Ip of Tenant: `/tenant `tenant_name",
-        "10. Count Virtual Machines by its Platform: `/platformofvm `platform_name",
-        "11. Report Total: `/report `(vm/device/ip/rack/all)"
+        "1. Find IP information: `/ip ip_address`",
+        "2. Find Free IP: `/ipfree number`",
+        "3. Find Device by its name: `/device device_name`",
+        "4. Find Device by its serial number: `/serial device_serial_number`",
+        "5. Find Virtual Machine by its name: `/vm vm_name`",
+        "6. Find Contact of Device by its name: `/contact contact_name`",
+        "7. Show Rack list by its name: `/rack rack_name`",
+        "8. Show interface connect of Device by device name: `/interface device_name`",
+        "9. Show List Device or Ip of Tenant: `/tenant tenant_name`",
+        "10. Count Virtual Machines by its Platform: `/platformofvm platform_name`",
+        "11. Report Total: `/report (vm/device/ip/rack/all)`"
     ]
     await update.message.reply_text('Use the following commands:\n' + '\n'.join(commands), parse_mode='Markdown')
 
@@ -627,7 +627,7 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler('start', start_command,filters.User(username=config.ADMIN_IDS)))
     application.add_handler(CommandHandler('help', help_command,filters.User(username=config.ADMIN_IDS)))
     application.add_handler(CommandHandler('device', cmd_device,filters.User(username=config.ADMIN_IDS)))
-    application.add_handler(CommandHandler('devicesn', cmd_dvsn,filters.User(username=config.ADMIN_IDS)))
+    application.add_handler(CommandHandler('serial', cmd_dvsn,filters.User(username=config.ADMIN_IDS)))
     application.add_handler(CommandHandler('ip', cmd_ip,filters.User(username=config.ADMIN_IDS)))
     application.add_handler(CommandHandler('vm', cmd_vm,filters.User(username=config.ADMIN_IDS)))
     application.add_handler(CommandHandler('contact', cmd_contact,filters.User(username=config.ADMIN_IDS)))
