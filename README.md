@@ -40,10 +40,23 @@ sudo apt install -y python3
 # CentOS
 sudo yum install -y python3
 ```
+- Tải xuống gói **venv** để tạo môi trường ảo:
+```
+# Ubuntu
+sudo apt install python3.10-venv
+
+# CentOS
+sudo yum install python3.10-venv
+```
 - Thiết lập môi trường ảo với **python3** trong thư mục `netbox-telegram`:
-    - `python3 -m venv venv`
+```
+python3 -m venv venv
+```
+
 - Kích hoạt môi trường ảo:
-  - `source venv/bin/activate`
+```
+source venv/bin/activate
+```
 - Cài đặt các mục cần thiết sử dụng `pip install`
 ```
 pip install pynetbox
@@ -99,10 +112,15 @@ systemctl enable netboxinfo
 systemctl status netboxinfo
 ```
 ## III. Một vài hình ảnh sử dụng
+Trước tiên, hãy truy cập vào Bot Chat ở ứng dụng Telegram của bạn
+- Khởi đầu, hãy nhập câu lệnh `/start` 
 
-- Menu của Bot:
+![](/Anh/Screenshot_1003.png)
 
+- Truy cập Menu hiển thị các câu lệnh với lệnh `/help`:
 ![](/Anh/Screenshot_967.png)
+
+Sử dụng một số chức năng của Bot
 
 - Tìm kiếm Device theo tên:
 
