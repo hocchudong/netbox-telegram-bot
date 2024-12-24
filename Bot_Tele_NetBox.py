@@ -151,11 +151,11 @@ async def cmd_device(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text(msg, parse_mode='Markdown')
 
-
 # Function to collect information of Device
 def devicesn_information(device_serial_number):
     try:
         device_info = nb.dcim.devices.filter(serial=device_serial_number)
+        print(device_info)
         if device_info:
             msg = 'The Information of Device: \n'
             for device in device_info:
@@ -170,7 +170,7 @@ def devicesn_information(device_serial_number):
                         f"Device ID:            {device.id}\n"
                         f"Device model type:    {device.device_type.model}\n"
                         f"Device serial:        `{device.serial}`\n"
-                        f"Tenant of Device:     `{device.tenant.name}`\n"
+                        f"Tenant of Device:     `{device.tenant.name if device.tenant else 'None'}`\n"
                         f"Device asset:         {device.asset_tag}\n"
                         f"Device site:          {device.site.name}\n"
                         f"Device rack:          `{device.rack.name if device.rack else 'None'}` - U: `{device.position if device.rack else 'None'}`\n"
@@ -385,8 +385,6 @@ async def cmd_report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     messages = report_information(rp_thing)
     for msg in messages:
         await update.message.reply_text(msg, parse_mode='Markdown')
-
-    
 
 # Function to collect free IP
 def freeip_information(number):
